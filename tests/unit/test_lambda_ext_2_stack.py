@@ -1,6 +1,6 @@
 import aws_cdk as core
 import aws_cdk.assertions as assertions
-from lambda_ext_2.lambda_ext_2_stack import LambdaExt2Stack
+from lambda_ext_2.infrastructure import LambdaExt2Stack
 
 
 def test_sqs_queue_created():

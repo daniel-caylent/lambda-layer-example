@@ -2,7 +2,7 @@
 
 import aws_cdk as cdk
 
-from lambda_ext_2.lambda_ext_2_stack import LambdaExt2Stack
+from lambda_ext_2.infrastructure import LambdaExt2Stack
 
 
 app = cdk.App()

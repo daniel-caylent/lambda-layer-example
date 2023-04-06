@@ -23,3 +23,6 @@ cdk.out/
 
 # Mac
 .DS_Store
+
+# python dependencies
+layers/external/python/*

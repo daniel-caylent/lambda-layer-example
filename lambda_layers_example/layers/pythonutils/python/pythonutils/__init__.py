@@ -1,1 +1,1 @@
-from .killswitch import killswitch
+from .utildecorator import utildecorator

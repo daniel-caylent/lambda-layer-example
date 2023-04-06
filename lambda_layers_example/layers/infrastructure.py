@@ -1,0 +1,26 @@
+from pathlib import Path, PurePath
+
+from constructs import Construct
+import aws_cdk as cdk
+
+THIS_DIRECTORY = Path(__file__).parent.absolute()
+UTILS_DIR = str(PurePath(THIS_DIRECTORY, 'pythonutils'))
+
+
+class LambdaLayersStack(cdk.Stack):
+
+    def __init__(self, scope: Construct, id: str, **kwargs) -> None:
+        super().__init__(scope, id, **kwargs)
+
+        # Create the Lambda layer
+        layer = cdk.aws_lambda.LayerVersion(self, "lambda-layer-example-python-utils",
+            code=cdk.aws_lambda.Code.from_asset(UTILS_DIR),
+            compatible_runtimes=[cdk.aws_lambda.Runtime.PYTHON_3_9],
+            description="Lambda layer with python utils"
+        )
+
+        cdk.CfnOutput(
+            self, "pythonUtilsArn",
+            value=layer.layer_version_arn,
+            export_name="pythonUtilsArn"
+        )

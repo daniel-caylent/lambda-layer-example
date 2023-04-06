@@ -2,11 +2,12 @@ import os
 import time
 import boto3
 
-from pythonutils import killswitch
+# This library is not found locally. It must be provided through a
+# lambda layer
+from pythonutils import utildecorator
 
-@killswitch
+@utildecorator
 def handler(event, context):
-    for record in event['Records']:
-        print('Inside the lambda, doing normal stuff!!')
+    print("Here is the actual lambda!")
 
     return 'All done!'

@@ -3,7 +3,7 @@
 import aws_cdk as cdk
 
 from layers.infrastructure import LambdaLayersStack
-from lambdamodule.infrastructure import LambdaStack, SecondLambdaStack
+from app.infrastructure import LambdaStack, SecondLambdaStack
 
 
 app = cdk.App()

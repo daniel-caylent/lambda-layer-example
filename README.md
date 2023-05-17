@@ -36,7 +36,7 @@ Now that you know what AWS expects of your code structure... how should you stru
             -pythonutils       <-- *This* is the top level module we'll have access to
               __init__.py           from any attached Lambda function
               utildecorator.py <-- the logic we want to share between Lambdas
-      -lambdamodule            <-- Application directory
+      -app                     <-- Application directory
         infrastructure.py      <-- Application infrastructure
         -runtime
           runtime.py           <-- Application logic
@@ -50,10 +50,27 @@ So now you have an idea of how to organize your application based both on best p
 Sharing Lambda layers across stacks
 -----------------------------------
 
-While there are multiple ways to access a layer accross stacks, the BEST way to do this is without duplicating the layer or generating additional versions of it. One way to achieve this is by sharing the ARN. This means building the layer in one infrastructure stack and exporting its ARN to make it available in downstream stacks. These downstream stacks can access the ARN and use it to attach the layer to a Lambda function without duplicating any resources.
+While there are multiple ways to access a layer accross stacks, there are two main goals you may consider when choosing your methodology.
 
-Because the layer stack is now a dependency for any downstream stacks using the ARN of the layer, you must implement `add_dependency` to your CDK app to ensure correct deployment order.
+1. Sharing the layer without creating duplicate versions, thereby minimizing your deployment time.
 
+One way to achieve this is by sharing the ARN. This means building the layer in one infrastructure stack and exporting its ARN to make it available in downstream stacks. These downstream stacks can access the ARN and use it to attach the layer to a Lambda function without duplicating any resources.
+
+Because the layer stack is now a dependency for any downstream stacks using the ARN of the layer, you must implement `add_dependency` to your CDK app to ensure correct deployment order. This approach is exemplified with the `external` layer in this project.
+
+The downside to this approach is if you make changes to the shared layer, CDK will attempt to delete the layer and deploy a new version. This operation will fail if the layer is in use by other services.
+
+
+2. Ensuring individual layer versions for independant services to guarantee successful indepentant deployments.
+
+This appraoch is ideal when granual deployments are the predominant business need. Every independant service has its own layer version; this guarentees the ability to destroy and recreate individual services. This is especially useful if a layer may be updated frequently and updates may only affect a small subset of the total number of services deployed. In this project, this type of layer is expemlified by the `pythonutils` layer.
+
+This approach also has a downside. Generating layer versions for each individual service means longer deployment times.
+
+Additional Considerations
+-------------------------
+
+Using CDK factories is recommended for consistency accross your applications. The CDK factory for this app is located in the in the `app/get_cdk.py`.
 
 # Setup environment
 Install the AWS CDK and setup authentication... not going to cover that here, but there are lots of resources on the web :)

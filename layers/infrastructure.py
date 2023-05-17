@@ -13,19 +13,6 @@ class LambdaLayersStack(cdk.Stack):
     def __init__(self, scope: Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
-        # Create the Lambda layer
-        layer = cdk.aws_lambda.LayerVersion(self, "lambda-layer-example-python-utils",
-            code=cdk.aws_lambda.Code.from_asset(UTILS_DIR),
-            compatible_runtimes=[cdk.aws_lambda.Runtime.PYTHON_3_9],
-            description="Lambda layer with python utils"
-        )
-
-        cdk.CfnOutput(
-            self, "pythonUtilsArn",
-            value=layer.layer_version_arn,
-            export_name="pythonUtilsArn"
-        )
-
         external_layer = cdk.aws_lambda.LayerVersion(self, "lambda-layer-example-external",
             code=cdk.aws_lambda.Code.from_asset(EXTERNAL_DIR),
             compatible_runtimes=[cdk.aws_lambda.Runtime.PYTHON_3_9],
